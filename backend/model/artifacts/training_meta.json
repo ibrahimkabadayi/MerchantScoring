@@ -1,0 +1,32 @@
+{
+  "trained_at": "2026-07-08T06:35:30.612456+00:00",
+  "n_merchants": 250,
+  "n_features": 10,
+  "feature_names": [
+    "rating",
+    "review_count",
+    "price_level",
+    "has_website",
+    "has_phone",
+    "category_encoded",
+    "district_density",
+    "cash_signal_score",
+    "sector_growth_index",
+    "review_recency_score"
+  ],
+  "positive_rate": 0.672,
+  "auc_roc": 0.7721,
+  "accuracy": 0.8,
+  "feature_importance": {
+    "review_recency_score": 0.1269,
+    "category_encoded": 0.1235,
+    "review_count": 0.1226,
+    "cash_signal_score": 0.1107,
+    "price_level": 0.1105,
+    "sector_growth_index": 0.0997,
+    "has_website": 0.0876,
+    "has_phone": 0.0785,
+    "rating": 0.0756,
+    "district_density": 0.0645
+  }
+}
