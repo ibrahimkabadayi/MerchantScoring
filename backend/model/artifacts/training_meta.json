@@ -1,6 +1,6 @@
 {
-  "trained_at": "2026-07-08T06:35:30.612456+00:00",
-  "n_merchants": 250,
+  "trained_at": "2026-07-08T20:18:25.145656+00:00",
+  "n_merchants": 276,
   "n_features": 10,
   "feature_names": [
     "rating",
@@ -14,19 +14,19 @@
     "sector_growth_index",
     "review_recency_score"
   ],
-  "positive_rate": 0.672,
-  "auc_roc": 0.7721,
-  "accuracy": 0.8,
+  "positive_rate": 0.1123,
+  "auc_roc": 0.74,
+  "accuracy": 0.9107,
   "feature_importance": {
-    "review_recency_score": 0.1269,
-    "category_encoded": 0.1235,
-    "review_count": 0.1226,
-    "cash_signal_score": 0.1107,
-    "price_level": 0.1105,
-    "sector_growth_index": 0.0997,
-    "has_website": 0.0876,
-    "has_phone": 0.0785,
-    "rating": 0.0756,
-    "district_density": 0.0645
+    "review_recency_score": 0.1776,
+    "price_level": 0.1397,
+    "review_count": 0.1267,
+    "sector_growth_index": 0.1184,
+    "has_website": 0.1081,
+    "cash_signal_score": 0.0987,
+    "rating": 0.0823,
+    "district_density": 0.0756,
+    "category_encoded": 0.0731,
+    "has_phone": 0.0
   }
 }

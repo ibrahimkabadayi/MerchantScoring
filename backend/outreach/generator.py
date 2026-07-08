@@ -106,7 +106,7 @@ Write a first-contact outreach message for this business."""
 # Message Generation
 # ---------------------------------------------------------------------------
 
-MODEL_NAME = "gemini-2.0-flash"
+MODEL_NAME = "gemini-3.5-flash"
 
 
 async def generate_outreach_message(merchant) -> str:

@@ -48,14 +48,13 @@ ARTIFACTS_DIR.mkdir(exist_ok=True)
 
 def generate_synthetic_labels(merchants_df: pd.DataFrame, features_df: pd.DataFrame) -> pd.Series:
     """
-    Generate synthetic binary labels based on business heuristics.
+    Generate stricter synthetic binary labels based on B2B sales heuristics.
 
     A merchant scores points for each criterion met:
-      +1  rating >= 3.5
-      +1  has_website or has_phone
-      +1  cash_signal_score < 0 (cash-heavy = POS opportunity)
-      +1  price_level >= 2
-      +0.5 review_count > median
+      +1.0  price_level >= 3 (Premium client)
+      +1.5  cash_signal_score < 0 (Explicit POS need)
+      +1.5  review_count > median AND has_website == 0 (Digital Opportunity)
+      +0.5  rating >= 4.5 (Highly rated)
 
     The total is converted to a probability, and a Bernoulli draw gives the label.
     """
@@ -68,25 +67,22 @@ def generate_synthetic_labels(merchants_df: pd.DataFrame, features_df: pd.DataFr
 
     scores = pd.Series(0.0, index=df.index)
 
-    # Criterion 1: Established business
-    scores += (df["rating"] >= 3.5).astype(float) * 1.0
+    # Criterion 1: Premium Client
+    scores += (df["price_level"] >= 3).astype(float) * 1.0
 
-    # Criterion 2: Reachable
-    scores += ((df["has_website"] == 1) | (df["has_phone"] == 1)).astype(float) * 1.0
+    # Criterion 2: Explicit POS Need
+    scores += (df["cash_signal_score"] < 0).astype(float) * 1.5
 
-    # Criterion 3: Cash-heavy (needs POS)
-    scores += (df["cash_signal_score"] < 0).astype(float) * 1.0
-
-    # Criterion 4: Medium+ price tier
-    scores += (df["price_level"] >= 2).astype(float) * 1.0
-
-    # Criterion 5: Active business (above-median reviews)
+    # Criterion 3: Digital Opportunity (Popular but no website)
     median_reviews = df["review_count"].median()
-    scores += (df["review_count"] > median_reviews).astype(float) * 0.5
+    scores += ((df["review_count"] > median_reviews) & (df["has_website"] == 0)).astype(float) * 1.5
 
-    # Convert to probability [0.1, 0.9] and draw labels
+    # Criterion 4: Elite rating
+    scores += (df["rating"] >= 4.5).astype(float) * 0.5
+
+    # Convert to probability [0.05, 0.95] and draw labels
     max_score = 4.5
-    probabilities = 0.1 + (scores / max_score) * 0.8
+    probabilities = 0.05 + (scores / max_score) * 0.90
     labels = (np.random.random(len(df)) < probabilities).astype(int)
 
     return labels
