@@ -6,6 +6,7 @@ import FilterBar from "../components/FilterBar";
 import LeadList from "../components/LeadList";
 import MerchantMap from "../components/MerchantMap";
 import OutreachPanel from "../components/OutreachPanel";
+import { Zap } from "lucide-react";
 
 export default function Dashboard() {
   const [merchants, setMerchants] = useState<Merchant[]>([]);
@@ -68,19 +69,19 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="h-screen flex flex-col overflow-hidden">
+    <div className="h-screen w-full flex flex-col p-4 gap-4 overflow-hidden">
       {/* Top Bar */}
-      <header className="flex-shrink-0 border-b border-[var(--color-border)] px-5 py-3">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--color-accent)] to-purple-500 flex items-center justify-center text-white font-bold text-sm">
-              M
+      <header className="glass-panel flex-shrink-0 px-8 py-5 flex flex-col gap-5">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[var(--color-accent)] to-[var(--color-accent-light)] flex items-center justify-center text-white shadow-lg shadow-indigo-500/20">
+              <Zap className="w-6 h-6 fill-white" />
             </div>
             <div>
-              <h1 className="text-lg font-bold text-white tracking-tight">
+              <h1 className="text-2xl font-bold text-white tracking-tight">
                 Moka Fit Score
               </h1>
-              <p className="text-[11px] text-slate-500 -mt-0.5">
+              <p className="text-sm text-slate-400">
                 AI-Powered Lead Scoring Dashboard
               </p>
             </div>
@@ -100,9 +101,9 @@ export default function Dashboard() {
       </header>
 
       {/* Main Content — 3-column layout */}
-      <main className="flex-1 flex overflow-hidden">
+      <main className="flex-1 flex gap-4 overflow-hidden">
         {/* Left: Lead List */}
-        <aside className="w-[340px] flex-shrink-0 border-r border-[var(--color-border)] p-3 overflow-hidden flex flex-col">
+        <aside className="glass-panel w-[380px] flex-shrink-0 p-4 overflow-hidden flex flex-col">
           <LeadList
             merchants={merchants}
             selectedId={selectedMerchant?.place_id ?? null}
@@ -113,8 +114,8 @@ export default function Dashboard() {
         </aside>
 
         {/* Center: Map */}
-        <div className="flex-1 p-3 min-h-0">
-          <div className="w-full h-full">
+        <div className="glass-panel flex-1 p-2 min-h-0 flex flex-col">
+          <div className="w-full h-full rounded-xl overflow-hidden relative z-0">
             <MerchantMap
               merchants={merchants}
               selectedId={selectedMerchant?.place_id ?? null}
@@ -124,7 +125,7 @@ export default function Dashboard() {
         </div>
 
         {/* Right: Detail / Outreach Panel */}
-        <aside className="w-[360px] flex-shrink-0 border-l border-[var(--color-border)] p-4 overflow-y-auto">
+        <aside className="glass-panel w-[400px] flex-shrink-0 p-5 overflow-y-auto">
           <OutreachPanel
             merchant={selectedMerchant}
             onClose={handleClosePanel}

@@ -1,5 +1,6 @@
 import type { Merchant } from "../types";
 import { CATEGORY_LABELS, TIER_COLORS, type Tier } from "../types";
+import { Star, MapPin } from "lucide-react";
 
 interface LeadListProps {
   merchants: Merchant[];
@@ -64,12 +65,12 @@ export default function LeadList({
 }: LeadListProps) {
   if (loading) {
     return (
-      <div className="space-y-2">
+      <div className="space-y-3">
         {[...Array(6)].map((_, i) => (
-          <div key={i} className="glass-card p-3 animate-pulse">
-            <div className="flex gap-3">
+          <div key={i} className="glass-card p-4 animate-pulse">
+            <div className="flex gap-4">
               <div className="w-12 h-12 rounded-full bg-[var(--color-surface-lighter)]" />
-              <div className="flex-1 space-y-2">
+              <div className="flex-1 space-y-3">
                 <div className="h-4 bg-[var(--color-surface-lighter)] rounded w-3/4" />
                 <div className="h-3 bg-[var(--color-surface-lighter)] rounded w-1/2" />
               </div>
@@ -85,35 +86,35 @@ export default function LeadList({
       <div className="text-xs text-slate-400 mb-2 px-1">
         Showing {merchants.length} of {total} leads
       </div>
-      <div className="flex-1 overflow-y-auto space-y-1.5 pr-1">
+      <div className="flex-1 overflow-y-auto space-y-3 pr-1">
         {merchants.map((m) => (
           <button
             key={m.place_id}
             id={`lead-${m.place_id}`}
             onClick={() => onSelect(m)}
-            className={`w-full text-left glass-card p-3 transition-all duration-200 hover:border-[var(--color-accent)] cursor-pointer ${
+            className={`w-full text-left glass-card p-4 transition-all duration-200 hover:border-[var(--color-accent)] cursor-pointer ${
               selectedId === m.place_id
                 ? "border-[var(--color-accent)] bg-[rgba(99,102,241,0.1)]"
                 : ""
             }`}
           >
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
               <ScoreRing score={m.moka_fit_score ?? 0} />
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-0.5">
+                <div className="flex items-center gap-3 mb-1">
                   <h3 className="text-sm font-semibold text-white truncate">
                     {m.name}
                   </h3>
                   <TierBadge tier={m.priority_tier ?? "LOW"} />
                 </div>
                 <div className="flex items-center gap-2 text-xs text-slate-400">
-                  <span>{CATEGORY_LABELS[m.category] ?? m.category}</span>
+                  <span className="flex items-center gap-1"><MapPin className="w-3 h-3"/> {m.district}</span>
                   <span>·</span>
-                  <span>{m.district}</span>
+                  <span>{CATEGORY_LABELS[m.category] ?? m.category}</span>
                   {m.rating && (
                     <>
                       <span>·</span>
-                      <span>⭐ {m.rating}</span>
+                      <span className="flex items-center gap-1"><Star className="w-3 h-3 text-amber-400"/> {m.rating}</span>
                     </>
                   )}
                 </div>

@@ -1,4 +1,5 @@
 import type { StatsResponse } from "../types";
+import { Users, ShieldCheck, AlertCircle, Zap } from "lucide-react";
 
 interface StatsBarProps {
   stats: StatsResponse | null;
@@ -8,9 +9,9 @@ interface StatsBarProps {
 export default function StatsBar({ stats, loading }: StatsBarProps) {
   if (loading || !stats) {
     return (
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[...Array(4)].map((_, i) => (
-          <div key={i} className="glass-card p-4 animate-pulse">
+          <div key={i} className="glass-card p-6 animate-pulse">
             <div className="h-4 bg-[var(--color-surface-lighter)] rounded w-20 mb-2" />
             <div className="h-8 bg-[var(--color-surface-lighter)] rounded w-16" />
           </div>
@@ -24,37 +25,37 @@ export default function StatsBar({ stats, loading }: StatsBarProps) {
       label: "Total Leads",
       value: stats.total_merchants,
       color: "text-white",
-      icon: "📊",
+      icon: <Users className="w-5 h-5 text-indigo-400" />,
     },
     {
       label: "High Priority",
       value: stats.high_count,
       color: "text-[var(--color-tier-high)]",
-      icon: "🟢",
+      icon: <ShieldCheck className="w-5 h-5 text-[var(--color-tier-high)]" />,
     },
     {
       label: "Medium Priority",
       value: stats.medium_count,
       color: "text-[var(--color-tier-medium)]",
-      icon: "🟡",
+      icon: <AlertCircle className="w-5 h-5 text-[var(--color-tier-medium)]" />,
     },
     {
       label: "Avg Score",
       value: stats.avg_score.toFixed(1),
       color: "text-[var(--color-accent-light)]",
-      icon: "⚡",
+      icon: <Zap className="w-5 h-5 text-[var(--color-accent-light)]" />,
     },
   ];
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
       {cards.map((card) => (
         <div
           key={card.label}
-          className="glass-card p-4 hover:border-[var(--color-accent)] transition-colors duration-200"
+          className="glass-card p-5 hover:border-[var(--color-accent)] transition-colors duration-200"
         >
-          <div className="flex items-center gap-2 mb-1">
-            <span className="text-lg">{card.icon}</span>
+          <div className="flex items-center gap-2 mb-2">
+            <span className="flex-shrink-0">{card.icon}</span>
             <span className="text-xs text-slate-400 uppercase tracking-wider font-medium">
               {card.label}
             </span>

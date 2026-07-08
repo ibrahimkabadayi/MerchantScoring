@@ -3,6 +3,7 @@ import type { Merchant, OutreachResponse } from "../types";
 import { CATEGORY_LABELS, TIER_COLORS, type Tier } from "../types";
 import { generateOutreach } from "../api/client";
 import ScoreBreakdownChart from "./ScoreBreakdownChart";
+import { Target, Sparkles, Copy, Check, Star, Coins, CheckCircle2, XCircle, Loader2 } from "lucide-react";
 
 interface OutreachPanelProps {
   merchant: Merchant | null;
@@ -16,9 +17,9 @@ export default function OutreachPanel({ merchant, onClose }: OutreachPanelProps)
 
   if (!merchant) {
     return (
-      <div className="h-full flex items-center justify-center text-slate-500">
+      <div className="h-full flex flex-col items-center justify-center text-slate-500">
+        <Target className="w-12 h-12 mb-4 opacity-50" />
         <div className="text-center">
-          <p className="text-4xl mb-3">🎯</p>
           <p className="text-sm">Select a merchant from the list or map</p>
           <p className="text-xs mt-1 text-slate-600">
             to view details and generate outreach
@@ -94,8 +95,8 @@ export default function OutreachPanel({ merchant, onClose }: OutreachPanelProps)
 
       {/* Score Breakdown */}
       {merchant.score_breakdown && (
-        <div className="glass-card p-4 mb-4">
-          <h3 className="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-3">
+        <div className="glass-card p-5 mb-5">
+          <h3 className="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-4">
             Score Breakdown
           </h3>
           <ScoreBreakdownChart breakdown={merchant.score_breakdown} />
@@ -103,16 +104,16 @@ export default function OutreachPanel({ merchant, onClose }: OutreachPanelProps)
       )}
 
       {/* Details */}
-      <div className="glass-card p-4 mb-4">
-        <h3 className="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-3">
+      <div className="glass-card p-5 mb-5">
+        <h3 className="text-xs text-slate-400 uppercase tracking-wider font-semibold mb-4">
           Business Details
         </h3>
-        <div className="space-y-2 text-sm">
+        <div className="space-y-3 text-sm">
           <DetailRow label="District" value={merchant.district ?? "N/A"} />
-          <DetailRow label="Rating" value={merchant.rating ? `⭐ ${merchant.rating} (${merchant.review_count} reviews)` : "N/A"} />
-          <DetailRow label="Price Level" value={merchant.price_level ? "💰".repeat(merchant.price_level) : "N/A"} />
-          <DetailRow label="Website" value={merchant.has_website ? "✅ Yes" : "❌ No"} />
-          <DetailRow label="Phone" value={merchant.has_phone ? "✅ Yes" : "❌ No"} />
+          <DetailRow label="Rating" value={merchant.rating ? <span className="flex items-center gap-1"><Star className="w-4 h-4 text-amber-400"/> {merchant.rating} ({merchant.review_count} reviews)</span> : "N/A"} />
+          <DetailRow label="Price Level" value={merchant.price_level ? <span className="flex items-center gap-0.5">{[...Array(merchant.price_level)].map((_,i) => <Coins key={i} className="w-4 h-4 text-emerald-400"/>)}</span> : "N/A"} />
+          <DetailRow label="Website" value={merchant.has_website ? <span className="flex items-center gap-1 text-emerald-400"><CheckCircle2 className="w-4 h-4"/> Yes</span> : <span className="flex items-center gap-1 text-rose-400"><XCircle className="w-4 h-4"/> No</span>} />
+          <DetailRow label="Phone" value={merchant.has_phone ? <span className="flex items-center gap-1 text-emerald-400"><CheckCircle2 className="w-4 h-4"/> Yes</span> : <span className="flex items-center gap-1 text-rose-400"><XCircle className="w-4 h-4"/> No</span>} />
         </div>
       </div>
 
@@ -122,29 +123,39 @@ export default function OutreachPanel({ merchant, onClose }: OutreachPanelProps)
           id="btn-generate-outreach"
           onClick={handleGenerate}
           disabled={loading}
-          className="w-full py-2.5 px-4 bg-[var(--color-accent)] hover:bg-[var(--color-accent-light)] disabled:opacity-50 text-white font-semibold rounded-lg transition-colors duration-200 mb-3 cursor-pointer"
+          className="relative w-full py-3 px-4 disabled:opacity-50 font-bold rounded-xl transition-all duration-300 mb-3 cursor-pointer group overflow-hidden shadow-lg shadow-indigo-500/20"
         >
-          {loading ? (
-            <span className="flex items-center justify-center gap-2">
-              <span className="animate-spin">⟳</span> Generating...
-            </span>
-          ) : (
-            "✨ Generate Outreach Message"
-          )}
+          {/* Animated gradient background */}
+          <div className="absolute inset-0 ai-shimmer-bg opacity-90 group-hover:opacity-100 transition-opacity"></div>
+          
+          {/* Button content (relative to sit above absolute background) */}
+          <div className="relative flex items-center justify-center gap-2 text-white">
+            {loading ? (
+              <>
+                <Loader2 className="w-5 h-5 animate-spin" />
+                <span>Generating Intelligence...</span>
+              </>
+            ) : (
+              <>
+                <Sparkles className="w-5 h-5" />
+                <span>Generate Outreach Message</span>
+              </>
+            )}
+          </div>
         </button>
 
         {outreach && (
-          <div className="glass-card p-4 flex-1 overflow-y-auto animate-fade-in">
-            <div className="flex items-center justify-between mb-2">
+          <div className="glass-card p-5 flex-1 overflow-y-auto animate-fade-in">
+            <div className="flex items-center justify-between mb-3">
               <h3 className="text-xs text-slate-400 uppercase tracking-wider font-semibold">
                 Outreach Message
               </h3>
               <button
                 id="btn-copy-outreach"
                 onClick={handleCopy}
-                className="text-xs text-[var(--color-accent-light)] hover:text-white transition-colors cursor-pointer"
+                className="flex items-center gap-1 text-xs text-[var(--color-accent-light)] hover:text-white transition-colors cursor-pointer font-medium"
               >
-                {copied ? "✓ Copied!" : "📋 Copy"}
+                {copied ? <><Check className="w-3 h-3"/> Copied!</> : <><Copy className="w-3 h-3"/> Copy</>}
               </button>
             </div>
             <p className="text-sm text-slate-200 whitespace-pre-wrap leading-relaxed">
@@ -157,9 +168,9 @@ export default function OutreachPanel({ merchant, onClose }: OutreachPanelProps)
   );
 }
 
-function DetailRow({ label, value }: { label: string; value: string }) {
+function DetailRow({ label, value }: { label: string; value: React.ReactNode }) {
   return (
-    <div className="flex justify-between">
+    <div className="flex justify-between items-center py-1">
       <span className="text-slate-400">{label}</span>
       <span className="text-slate-200 font-medium">{value}</span>
     </div>
